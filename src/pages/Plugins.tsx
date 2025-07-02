@@ -1,137 +1,150 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search, Edit, Trash2, Eye, Download, Upload } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Eye, Download, Package, Calendar, User, BarChart3, Star, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
-
-interface Plugin {
-  id: number;
-  name: string;
-  slug: string;
-  type: 'free' | 'premium';
-  price?: number;
-  description: string;
-  downloads: number;
-  status: 'active' | 'inactive';
-  createdAt: string;
-}
+import { Plugin } from "@/types/plugin";
 
 const Plugins = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<string>("all");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingPlugin, setEditingPlugin] = useState<Plugin | null>(null);
+  const [filterCategory, setFilterCategory] = useState<string>("all");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
 
+  // Updated mock data with new Plugin interface
   const [plugins, setPlugins] = useState<Plugin[]>([
     {
       id: 1,
+      pluginId: "advanced-reports",
       name: "GarapaCRM Advanced Reports",
       slug: "advanced-reports",
-      type: "premium",
+      version: "2.1.0",
+      description: "Relatórios avançados com gráficos interativos, exportação para PDF e análise de dados em tempo real",
+      author: "GarapaCRM Team",
+      homepage: "https://github.com/garapacrm/advanced-reports",
+      category: "report",
+      tags: ["relatórios", "gráficos", "pdf", "analytics"],
+      icon: "BarChart3",
+      minimumCoreVersion: "3.18.0",
+      dependencies: [],
+      conflicts: [],
+      license: "premium",
       price: 299.00,
-      description: "Relatórios avançados com gráficos e exportação para PDF",
-      downloads: 245,
+      currency: "BRL",
+      features: [],
+      permissions: [],
+      routes: [],
+      hooks: {},
+      settings: [],
+      downloads: 1247,
+      rating: 4.8,
       status: "active",
-      createdAt: "2024-01-15",
+      createdAt: "2024-01-15T10:30:00Z",
+      updatedAt: "2025-01-25T14:22:00Z"
     },
     {
       id: 2,
+      pluginId: "integration-pack",
       name: "GarapaCRM Integration Pack",
       slug: "integration-pack",
-      type: "premium",
+      version: "1.5.2",
+      description: "Pacote completo de integrações com APIs externas, webhooks e sincronização de dados",
+      author: "TechFlow Solutions",
+      homepage: "https://techflow.com/integration-pack",
+      category: "integration",
+      tags: ["api", "webhook", "integração", "sync"],
+      icon: "Package",
+      minimumCoreVersion: "3.16.0",
+      dependencies: ["axios"],
+      conflicts: [],
+      license: "premium",
       price: 149.00,
-      description: "Integração com APIs externas e webhooks",
-      downloads: 182,
+      currency: "BRL",
+      features: [],
+      permissions: [],
+      routes: [],
+      hooks: {},
+      settings: [],
+      downloads: 892,
+      rating: 4.5,
       status: "active",
-      createdAt: "2024-01-10",
+      createdAt: "2024-01-10T09:15:00Z",
+      updatedAt: "2025-01-20T11:45:00Z"
     },
     {
       id: 3,
-      name: "GarapaCRM Theme Dark",
+      pluginId: "theme-dark",
+      name: "GarapaCRM Dark Theme",
       slug: "theme-dark",
-      type: "free",
-      description: "Tema escuro para o GarapaCRM",
-      downloads: 1203,
+      version: "1.2.1",
+      description: "Tema escuro elegante e moderno para o GarapaCRM com suporte a customização de cores",
+      author: "DesignPro",
+      category: "theme",
+      tags: ["tema", "dark", "ui", "design"],
+      icon: "Eye",
+      minimumCoreVersion: "3.15.0",
+      dependencies: [],
+      conflicts: ["light-theme"],
+      license: "free",
+      currency: "BRL",
+      features: [],
+      permissions: [],
+      routes: [],
+      hooks: {},
+      settings: [],
+      downloads: 2156,
+      rating: 4.9,
       status: "active",
-      createdAt: "2024-01-05",
+      createdAt: "2024-01-05T14:20:00Z",
+      updatedAt: "2025-01-18T16:30:00Z"
     },
     {
       id: 4,
-      name: "GarapaCRM Mobile App",
-      slug: "mobile-app",
-      type: "premium",
+      pluginId: "mobile-companion",
+      name: "Mobile Companion",
+      slug: "mobile-companion",
+      version: "0.9.8",
+      description: "Aplicativo mobile nativo para Android e iOS com sincronização em tempo real",
+      author: "MobileDev Inc",
+      category: "tool",
+      tags: ["mobile", "app", "android", "ios"],
+      icon: "User",
+      minimumCoreVersion: "3.19.0",
+      dependencies: ["react-native"],
+      conflicts: [],
+      license: "premium",
       price: 399.00,
-      description: "Aplicativo mobile nativo para Android e iOS",
-      downloads: 89,
+      currency: "BRL",
+      features: [],
+      permissions: [],
+      routes: [],
+      hooks: {},
+      settings: [],
+      downloads: 234,
+      rating: 4.2,
       status: "inactive",
-      createdAt: "2024-01-20",
+      createdAt: "2024-01-20T08:45:00Z",
+      updatedAt: "2025-01-15T13:22:00Z"
     },
   ]);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    slug: "",
-    type: "free" as "free" | "premium",
-    price: "",
-    description: "",
-  });
-
   const filteredPlugins = plugins.filter((plugin) => {
     const matchesSearch = plugin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         plugin.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = filterType === "all" || plugin.type === filterType;
-    return matchesSearch && matchesType;
+                         plugin.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         plugin.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         plugin.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    const matchesType = filterType === "all" || plugin.license === filterType;
+    const matchesCategory = filterCategory === "all" || plugin.category === filterCategory;
+    const matchesStatus = filterStatus === "all" || plugin.status === filterStatus;
+    
+    return matchesSearch && matchesType && matchesCategory && matchesStatus;
   });
-
-  const handleSubmit = () => {
-    if (!formData.name || !formData.slug || !formData.description) {
-      toast.error("Preencha todos os campos obrigatórios");
-      return;
-    }
-
-    const newPlugin: Plugin = {
-      id: editingPlugin ? editingPlugin.id : plugins.length + 1,
-      name: formData.name,
-      slug: formData.slug,
-      type: formData.type,
-      price: formData.type === "premium" ? parseFloat(formData.price) : undefined,
-      description: formData.description,
-      downloads: editingPlugin ? editingPlugin.downloads : 0,
-      status: "active",
-      createdAt: editingPlugin ? editingPlugin.createdAt : new Date().toISOString().split('T')[0],
-    };
-
-    if (editingPlugin) {
-      setPlugins(plugins.map(p => p.id === editingPlugin.id ? newPlugin : p));
-      toast.success("Plugin atualizado com sucesso!");
-    } else {
-      setPlugins([...plugins, newPlugin]);
-      toast.success("Plugin criado com sucesso!");
-    }
-
-    setIsDialogOpen(false);
-    setEditingPlugin(null);
-    setFormData({ name: "", slug: "", type: "free", price: "", description: "" });
-  };
-
-  const handleEdit = (plugin: Plugin) => {
-    setEditingPlugin(plugin);
-    setFormData({
-      name: plugin.name,
-      slug: plugin.slug,
-      type: plugin.type,
-      price: plugin.price?.toString() || "",
-      description: plugin.description,
-    });
-    setIsDialogOpen(true);
-  };
 
   const handleDelete = (id: number) => {
     setPlugins(plugins.filter(p => p.id !== id));
@@ -145,112 +158,37 @@ const Plugins = () => {
     toast.success("Status do plugin atualizado!");
   };
 
+  const handleViewDetails = (plugin: Plugin) => {
+    navigate(`/plugins/${plugin.id}`);
+  };
+
+  const handleEdit = (plugin: Plugin) => {
+    navigate(`/plugins/edit/${plugin.id}`);
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-garapa-blue-dark">Plugins</h1>
           <p className="text-muted-foreground mt-1">
-            Gerencie os plugins do marketplace GarapaCRM
+            Gerencie os plugins do marketplace GarapaCRM Community
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button 
-              className="bg-garapa-blue hover:bg-garapa-blue/90"
-              onClick={() => {
-                setEditingPlugin(null);
-                setFormData({ name: "", slug: "", type: "free", price: "", description: "" });
-              }}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Novo Plugin
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>
-                {editingPlugin ? "Editar Plugin" : "Novo Plugin"}
-              </DialogTitle>
-              <DialogDescription>
-                {editingPlugin ? "Atualize as informações do plugin" : "Adicione um novo plugin ao marketplace"}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="name">Nome do Plugin *</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Ex: GarapaCRM Advanced Reports"
-                />
-              </div>
-              <div>
-                <Label htmlFor="slug">Slug *</Label>
-                <Input
-                  id="slug"
-                  value={formData.slug}
-                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  placeholder="Ex: advanced-reports"
-                />
-              </div>
-              <div>
-                <Label htmlFor="type">Tipo *</Label>
-                <Select 
-                  value={formData.type} 
-                  onValueChange={(value: "free" | "premium") => setFormData({ ...formData, type: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="free">Gratuito</SelectItem>
-                    <SelectItem value="premium">Premium</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              {formData.type === "premium" && (
-                <div>
-                  <Label htmlFor="price">Preço (R$) *</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.01"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    placeholder="299.00"
-                  />
-                </div>
-              )}
-              <div>
-                <Label htmlFor="description">Descrição *</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Descreva as funcionalidades do plugin..."
-                  rows={3}
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                  Cancelar
-                </Button>
-                <Button onClick={handleSubmit} className="bg-garapa-blue hover:bg-garapa-blue/90">
-                  {editingPlugin ? "Atualizar" : "Criar"}
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Button 
+          className="bg-garapa-blue hover:bg-garapa-blue/90"
+          onClick={() => navigate("/plugins/new")}
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Novo Plugin
+        </Button>
       </div>
 
-      {/* Filters */}
+      {/* Advanced Filters */}
       <Card>
         <CardContent className="p-4">
-          <div className="flex gap-4 items-center">
-            <div className="relative flex-1 max-w-sm">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 placeholder="Buscar plugins..."
@@ -259,9 +197,10 @@ const Plugins = () => {
                 className="pl-10"
               />
             </div>
+            
             <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger className="w-48">
-                <SelectValue />
+              <SelectTrigger>
+                <SelectValue placeholder="Tipo de licença" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos os tipos</SelectItem>
@@ -269,72 +208,165 @@ const Plugins = () => {
                 <SelectItem value="premium">Premium</SelectItem>
               </SelectContent>
             </Select>
+
+            <Select value={filterCategory} onValueChange={setFilterCategory}>
+              <SelectTrigger>
+                <SelectValue placeholder="Categoria" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas categorias</SelectItem>
+                <SelectItem value="extension">Extensão</SelectItem>
+                <SelectItem value="integration">Integração</SelectItem>
+                <SelectItem value="theme">Tema</SelectItem>
+                <SelectItem value="report">Relatório</SelectItem>
+                <SelectItem value="tool">Ferramenta</SelectItem>
+                <SelectItem value="widget">Widget</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger>
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos status</SelectItem>
+                <SelectItem value="active">Ativo</SelectItem>
+                <SelectItem value="inactive">Inativo</SelectItem>
+                <SelectItem value="pending">Pendente</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
 
-      {/* Plugins Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Enhanced Plugins Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredPlugins.map((plugin) => (
-          <Card key={plugin.id} className="card-hover">
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <CardTitle className="text-lg text-garapa-blue-dark">{plugin.name}</CardTitle>
-                  <CardDescription className="mt-1">{plugin.description}</CardDescription>
+          <Card key={plugin.id} className="card-hover group cursor-pointer" onClick={() => handleViewDetails(plugin)}>
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-3 flex-1">
+                  <div className="w-12 h-12 bg-garapa-blue rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Package className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-lg text-garapa-blue-dark group-hover:text-garapa-blue transition-colors truncate">
+                      {plugin.name}
+                    </CardTitle>
+                    <CardDescription className="text-sm line-clamp-2">
+                      {plugin.description}
+                    </CardDescription>
+                  </div>
                 </div>
-                <Badge variant={plugin.status === "active" ? "default" : "secondary"}>
+                <Badge variant={plugin.status === "active" ? "default" : "secondary"} className="ml-2">
                   {plugin.status === "active" ? "Ativo" : "Inativo"}
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <Badge variant={plugin.type === "premium" ? "destructive" : "secondary"}>
-                      {plugin.type === "premium" ? "Premium" : "Gratuito"}
-                    </Badge>
-                    {plugin.type === "premium" && (
-                      <span className="font-semibold text-garapa-blue-dark">
-                        R$ {plugin.price?.toFixed(2)}
-                      </span>
-                    )}
-                  </div>
+            
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <User className="w-3 h-3" />
+                  <span className="truncate">{plugin.author}</span>
                 </div>
-                
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Download className="w-4 h-4" />
-                  <span>{plugin.downloads} downloads</span>
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <Calendar className="w-3 h-3" />
+                  <span>v{plugin.version}</span>
                 </div>
+              </div>
 
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleEdit(plugin)}
-                    className="flex-1"
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Badge 
+                    variant={plugin.license === "premium" ? "destructive" : "secondary"}
+                    className="text-xs"
                   >
-                    <Edit className="w-4 h-4 mr-1" />
-                    Editar
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => toggleStatus(plugin.id)}
-                    className="flex-1"
-                  >
-                    <Eye className="w-4 h-4 mr-1" />
-                    {plugin.status === "active" ? "Desativar" : "Ativar"}
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => handleDelete(plugin.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                    {plugin.license === "premium" ? "Premium" : "Gratuito"}
+                  </Badge>
+                  <Badge variant="outline" className="text-xs capitalize">
+                    {plugin.category}
+                  </Badge>
                 </div>
+                {plugin.license === "premium" && (
+                  <span className="font-semibold text-garapa-blue-dark text-sm">
+                    R$ {plugin.price?.toFixed(2)}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Download className="w-3 h-3" />
+                  <span>{plugin.downloads.toLocaleString()} downloads</span>
+                </div>
+                {plugin.rating && (
+                  <div className="flex items-center gap-1">
+                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                    <span>{plugin.rating}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-1 max-h-16 overflow-hidden">
+                {plugin.tags.slice(0, 3).map((tag, index) => (
+                  <Badge key={index} variant="outline" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+                {plugin.tags.length > 3 && (
+                  <Badge variant="outline" className="text-xs">
+                    +{plugin.tags.length - 3}
+                  </Badge>
+                )}
+              </div>
+
+              <div className="pt-2 border-t flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleViewDetails(plugin);
+                  }}
+                  className="flex-1"
+                >
+                  <Eye className="w-3 h-3 mr-1" />
+                  Ver
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(plugin);
+                  }}
+                  className="flex-1"
+                >
+                  <Edit className="w-3 h-3 mr-1" />
+                  Editar
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleStatus(plugin.id);
+                  }}
+                  className="flex-1"
+                >
+                  {plugin.status === "active" ? "Desativar" : "Ativar"}
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(plugin.id);
+                  }}
+                >
+                  <Trash2 className="w-3 h-3" />
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -343,8 +375,64 @@ const Plugins = () => {
 
       {filteredPlugins.length === 0 && (
         <Card>
-          <CardContent className="py-8 text-center">
-            <p className="text-muted-foreground">Nenhum plugin encontrado</p>
+          <CardContent className="py-12 text-center">
+            <Package className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum plugin encontrado</h3>
+            <p className="text-muted-foreground mb-4">
+              Não encontramos plugins que correspondam aos seus filtros.
+            </p>
+            <div className="flex gap-2 justify-center">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSearchTerm("");
+                  setFilterType("all");
+                  setFilterCategory("all");
+                  setFilterStatus("all");
+                }}
+              >
+                Limpar Filtros
+              </Button>
+              <Button 
+                className="bg-garapa-blue hover:bg-garapa-blue/90"
+                onClick={() => navigate("/plugins/new")}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Criar Primeiro Plugin
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Quick Stats */}
+      {plugins.length > 0 && (
+        <Card>
+          <CardContent className="p-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+              <div>
+                <p className="text-2xl font-bold text-garapa-blue-dark">{plugins.length}</p>
+                <p className="text-sm text-muted-foreground">Total de Plugins</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-garapa-blue-dark">
+                  {plugins.filter(p => p.status === "active").length}
+                </p>
+                <p className="text-sm text-muted-foreground">Plugins Ativos</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-garapa-blue-dark">
+                  {plugins.reduce((acc, p) => acc + p.downloads, 0).toLocaleString()}
+                </p>
+                <p className="text-sm text-muted-foreground">Total de Downloads</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-garapa-blue-dark">
+                  {plugins.filter(p => p.license === "premium").length}
+                </p>
+                <p className="text-sm text-muted-foreground">Plugins Premium</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       )}
