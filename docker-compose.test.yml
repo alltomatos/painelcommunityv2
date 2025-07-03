@@ -1,0 +1,110 @@
+version: "3.7"
+services:
+
+## --------------------------- PAINEL COMMUNITY --------------------------- ##
+
+  painelcommunity_frontend:
+    image: alltomatos/painel-community:latest
+    networks:
+      - proxy
+    environment:
+      - NODE_ENV=production
+      - VITE_APP_NAME=Painel Community (Test)
+      - VITE_APP_VERSION=1.0.0-test
+      - VITE_API_URL=https://api-test.painel.alltomatos.app.br
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+        - node.role == manager
+      labels:
+        - traefik.enable=1
+        - traefik.http.routers.painelcommunity_frontend_test.rule=Host(`test.painel.alltomatos.app.br`)
+        - traefik.http.routers.painelcommunity_frontend_test.entrypoints=websecure
+        - traefik.http.routers.painelcommunity_frontend_test.priority=1
+        - traefik.http.routers.painelcommunity_frontend_test.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.painelcommunity_frontend_test.service=painelcommunity_frontend_test
+        - traefik.http.services.painelcommunity_frontend_test.loadbalancer.server.port=3000
+        - traefik.http.services.painelcommunity_frontend_test.loadbalancer.passHostHeader=true
+
+## --------------------------- PAINEL COMMUNITY API --------------------------- ##
+
+  painelcommunity_api:
+    image: alltomatos/painel-community-api:latest
+    networks:
+      - proxy
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=postgresql://painel_user:painel_password@postgres:5432/painelcommunity
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+      - JWT_EXPIRES_IN=7d
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+        - node.role == manager
+      labels:
+        - traefik.enable=1
+        - traefik.http.routers.painelcommunity_api_test.rule=Host(`api-test.painel.alltomatos.app.br`)
+        - traefik.http.routers.painelcommunity_api_test.entrypoints=websecure
+        - traefik.http.routers.painelcommunity_api_test.priority=1
+        - traefik.http.routers.painelcommunity_api_test.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.painelcommunity_api_test.service=painelcommunity_api_test
+        - traefik.http.services.painelcommunity_api_test.loadbalancer.server.port=3001
+        - traefik.http.services.painelcommunity_api_test.loadbalancer.passHostHeader=true
+
+## --------------------------- POSTGRES --------------------------- ##
+
+  postgres:
+    image: postgres:15-alpine
+    networks:
+      - proxy
+    environment:
+      - POSTGRES_DB=painelcommunity
+      - POSTGRES_USER=painel_user
+      - POSTGRES_PASSWORD=painel_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+        - node.role == manager
+
+## --------------------------- REDIS --------------------------- ##
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - proxy
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+        - node.role == manager
+
+## --------------------------- VOLUMES --------------------------- ##
+
+volumes:
+  postgres_data:
+    external: true
+    name: painelcommunity_postgres_data
+  redis_data:
+    external: true
+    name: painelcommunity_redis_data
+
+## --------------------------- NETWORKS --------------------------- ##
+
+networks:
+  proxy:
+    external: true
+    name: proxy 
