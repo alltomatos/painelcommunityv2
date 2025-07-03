@@ -1,73 +1,78 @@
-# Welcome to your Lovable project
+# 🛠️ Painel Community – Gerenciador de Plugins do GarapaCRM
 
-## Project info
+O **Painel Community** é o backend proprietário do marketplace de plugins do ecossistema GarapaCRM Community. Ele centraliza o catálogo de plugins (gratuitos e pagos), gerencia uploads, pagamentos, ativa/desativa plugins e expõe uma API para o marketplace do GarapaCRM consumir, baixar e comprar plugins.
 
-**URL**: https://lovable.dev/projects/e49809a7-2165-4cf1-b79a-7d06e457b872
+---
 
-## How can I edit this code?
+## 📦 Funcionalidades Principais
+- Catálogo centralizado de plugins (gratuitos e pagos)
+- Upload, download, ativação e desativação de plugins
+- Integração com Mercado Pago (checkout, liberação pós-pagamento)
+- API RESTful para integração com o marketplace do GarapaCRM
+- Gerenciamento de permissões (admin, usuário comum)
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 🏗️ Arquitetura
+- **Backend:** NestJS + TypeORM + PostgreSQL
+- **API:** RESTful, JWT Auth, CORS habilitado
+- **Deploy:** Docker, Docker Compose, Docker Swarm
+- **CI/CD:** GitHub Actions (build, test, push Docker, deploy automático)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e49809a7-2165-4cf1-b79a-7d06e457b872) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Como rodar localmente
 
-**Use your preferred IDE**
+1. Instale as dependências:
+   ```bash
+   npm install
+   ```
+2. Configure o arquivo `.env` (baseie-se em `.env.example`).
+3. Suba o banco de dados (Postgres) localmente ou via Docker.
+4. Rode a aplicação:
+   ```bash
+   npm run start:dev
+   ```
+5. Acesse a API em `http://localhost:1953`
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🐳 Como rodar com Docker
 
-Follow these steps:
+1. Ajuste o arquivo `.env` conforme necessário.
+2. Build e up com Docker Compose:
+   ```bash
+   docker-compose up --build
+   ```
+3. Acesse a API em `http://localhost:1953`
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🚢 Deploy com Docker Swarm
 
-# Step 3: Install the necessary dependencies.
-npm i
+1. Faça build e push da imagem Docker para o Docker Hub.
+2. Na VPS, execute:
+   ```bash
+   docker stack deploy -c docker-compose.yml painelcommunity
+   ```
+3. Acompanhe os logs e healthchecks dos serviços.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## 🔄 CI/CD (GitHub Actions)
+- Build, lint, testes unitários e E2E automáticos
+- Build e push da imagem Docker para o Docker Hub
+- Deploy automático na VPS via SSH e Docker Swarm
+- Configure os secrets no repositório para acesso seguro
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 📚 Documentação
+- Documentação da API: `painelcommunity/api/docs`
+- Documentação geral do Painel Community: `painelcommunity/docs`
+- Guia de integração do ecossistema: `../ecossistema_garapa/guia-integracao-ecossistema.md`
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/e49809a7-2165-4cf1-b79a-7d06e457b872) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## 🏷️ Licença
+Este projeto faz parte do ecossistema GarapaCRM. O Painel Community é proprietário, enquanto o GarapaCRM Community é open source.

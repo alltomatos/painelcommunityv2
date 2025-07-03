@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  api:
+    image: seuusuario/painelcommunity-api:latest
+    env_file: .env
+    ports:
+      - "1953:1953"
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: marketplacedb
+      POSTGRES_USER: seuuser
+      POSTGRES_PASSWORD: seusenha
+    volumes:
+      - painelcommunity_db:/var/lib/postgresql/data
+volumes:
+  painelcommunity_db: 

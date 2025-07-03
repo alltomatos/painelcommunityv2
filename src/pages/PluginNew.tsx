@@ -12,6 +12,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Upload, Plus, X, Info } from "lucide-react";
 import { toast } from "sonner";
 import { PluginFormData, PluginFeature, PluginPermission, PluginRoute, PluginSetting } from "@/types/plugin";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const schema = z.object({
+  name: z.string().min(2, "Nome obrigatório"),
+  slug: z.string().min(2, "Slug obrigatório"),
+  version: z.string().min(1, "Versão obrigatória"),
+  description: z.string().min(5, "Descrição obrigatória"),
+  author: z.string().min(2, "Autor obrigatório"),
+  license: z.enum(["free", "premium"]),
+  price: z.string().optional(),
+  file: z.any().optional(),
+});
+
+type FormData = z.infer<typeof schema>;
 
 const PluginNew = () => {
   const navigate = useNavigate();
@@ -48,6 +64,14 @@ const PluginNew = () => {
   
   const [newTag, setNewTag] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const handleInputChange = (field: keyof PluginFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -123,31 +147,11 @@ const PluginNew = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    // Validation
-    if (!formData.name || !formData.slug || !formData.description || !formData.author) {
-      toast.error("Preencha todos os campos obrigatórios");
-      return;
-    }
-
-    if (formData.license === "premium" && (!formData.price || parseFloat(formData.price) <= 0)) {
-      toast.error("Defina um preço válido para plugins premium");
-      return;
-    }
-
-    if (!selectedFile) {
-      toast.error("Selecione o arquivo .zip do plugin");
-      return;
-    }
-
-    try {
-      // Here would be the API call to create the plugin
-      // For now, just simulate success
-      toast.success("Plugin criado com sucesso!");
+  const onSubmit = (data: FormData) => {
+    // Simula cadastro (mock)
+    setTimeout(() => {
       navigate("/plugins");
-    } catch (error) {
-      toast.error("Erro ao criar plugin");
-    }
+    }, 800);
   };
 
   return (
@@ -195,7 +199,9 @@ const PluginNew = () => {
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
                     placeholder="Ex: GarapaCRM Advanced Reports"
+                    {...register("name")}
                   />
+                  {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
                 </div>
                 <div>
                   <Label htmlFor="slug">Slug *</Label>
@@ -204,7 +210,9 @@ const PluginNew = () => {
                     value={formData.slug}
                     onChange={(e) => handleInputChange("slug", e.target.value)}
                     placeholder="advanced-reports"
+                    {...register("slug")}
                   />
+                  {errors.slug && <span className="text-xs text-red-500">{errors.slug.message}</span>}
                 </div>
               </div>
 
@@ -216,7 +224,9 @@ const PluginNew = () => {
                     value={formData.version}
                     onChange={(e) => handleInputChange("version", e.target.value)}
                     placeholder="1.0.0"
+                    {...register("version")}
                   />
+                  {errors.version && <span className="text-xs text-red-500">{errors.version.message}</span>}
                 </div>
                 <div>
                   <Label htmlFor="author">Autor *</Label>
@@ -225,7 +235,9 @@ const PluginNew = () => {
                     value={formData.author}
                     onChange={(e) => handleInputChange("author", e.target.value)}
                     placeholder="Seu Nome"
+                    {...register("author")}
                   />
+                  {errors.author && <span className="text-xs text-red-500">{errors.author.message}</span>}
                 </div>
                 <div>
                   <Label htmlFor="homepage">Homepage</Label>
@@ -246,7 +258,9 @@ const PluginNew = () => {
                   onChange={(e) => handleInputChange("description", e.target.value)}
                   placeholder="Descreva as funcionalidades do plugin..."
                   rows={3}
+                  {...register("description")}
                 />
+                {errors.description && <span className="text-xs text-red-500">{errors.description.message}</span>}
               </div>
             </CardContent>
           </Card>
@@ -334,6 +348,7 @@ const PluginNew = () => {
                       value={formData.price}
                       onChange={(e) => handleInputChange("price", e.target.value)}
                       placeholder="299.00"
+                      {...register("price")}
                     />
                   </div>
                 )}
@@ -508,7 +523,7 @@ const PluginNew = () => {
         <Button variant="outline" onClick={() => navigate("/plugins")}>
           Cancelar
         </Button>
-        <Button onClick={handleSubmit} className="bg-garapa-blue hover:bg-garapa-blue/90">
+        <Button type="submit" className="bg-garapa-blue hover:bg-garapa-blue/90" disabled={isSubmitting}>
           Criar Plugin
         </Button>
       </div>
