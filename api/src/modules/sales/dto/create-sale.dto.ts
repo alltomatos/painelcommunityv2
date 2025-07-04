@@ -5,40 +5,40 @@ export class CreateSaleDto {
   @ApiProperty({ example: 'Produto X', description: 'Nome do produto vendido' })
   @IsString()
   @IsNotEmpty()
-  product: string;
+  product!: string;
 
   @ApiProperty({ example: 100.5, description: 'Valor da venda' })
   @IsNumber()
   @IsNotEmpty()
-  value: number;
+  value!: number;
 
   @ApiProperty({ example: 1, description: 'ID do usuário responsável' })
   @IsNumber()
   @IsNotEmpty()
-  userId: number;
+  userId!: number;
 
   @ApiProperty({ example: 'plugin-teste', description: 'Slug do plugin vendido' })
   @IsString()
   @IsNotEmpty()
-  plugin: string;
+  plugin!: string;
 
   @ApiProperty({ example: 'comprador@crm.com', description: 'Email do comprador' })
   @IsString()
   @IsNotEmpty()
-  buyer: string;
+  buyer!: string;
 
   @ApiProperty({ example: 'pago', description: 'Status da venda' })
   @IsString()
   @IsNotEmpty()
-  status: string;
+  status!: string;
 
   @ApiProperty({ example: '2025-07-03', description: 'Data da venda' })
   @IsString()
   @IsNotEmpty()
-  date: string;
+  date!: string;
 
   @ApiProperty({ example: 'token123', description: 'Token da venda' })
   @IsString()
   @IsNotEmpty()
-  token: string;
+  token!: string;
 } 

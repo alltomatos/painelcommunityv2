@@ -3,32 +3,32 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('sales')
 export class Sale {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  plugin: string;
+  plugin!: string;
 
   @Column()
-  buyer: string;
+  buyer!: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  value: number;
+  value!: number;
 
   @Column({ default: 'pago' })
-  status: string;
+  status!: string;
 
   @Column({ type: 'date' })
-  date: string;
+  date!: string;
 
   @Column()
-  token: string;
+  token!: string;
 
   @Column()
-  product: string;
+  product!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 } 

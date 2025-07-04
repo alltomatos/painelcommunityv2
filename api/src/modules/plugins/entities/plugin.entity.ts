@@ -3,29 +3,29 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('plugins')
 export class Plugin {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ unique: true })
-  slug: string;
+  slug!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  version: string;
+  version!: string;
 
   @Column({ type: 'text' })
-  description: string;
+  description!: string;
 
   @Column()
-  author: string;
+  author!: string;
 
   @Column({ default: 'active' })
-  status: string;
+  status!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 } 

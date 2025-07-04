@@ -7,11 +7,11 @@ const rootDir = path.resolve(__dirname);
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT || '5432', 10),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
+  host: process.env.DATABASE_HOST,
+  port: parseInt(process.env.DATABASE_PORT || '5432', 10),
+  username: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   entities: [path.join(rootDir, '/modules/**/*.entity.{ts,js}')],
   migrations: [path.join(rootDir, '/migrations/*.{ts,js}')],
   synchronize: false,
