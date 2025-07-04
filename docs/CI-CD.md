@@ -38,48 +38,39 @@ Configure os seguintes secrets no repositório GitHub:
 
 | Secret | Descrição | Exemplo |
 |--------|-----------|---------|
-| `DOCKER_USERNAME` | Usuário do Docker Hub | `alltomatos` |
-| `DOCKER_PASSWORD` | Token do Docker Hub | `dckr_pat_...` |
 | `SSH_PRIVATE_KEY` | Chave SSH privada | `-----BEGIN OPENSSH PRIVATE KEY-----` |
 | `SERVER_HOST` | IP/domínio do servidor | `123.456.789.10` |
 | `SERVER_USER` | Usuário SSH | `root` |
 
 ### 🔐 Como Configurar Secrets
 
-1. **Docker Hub Token:**
-   ```bash
-   # Acesse: https://hub.docker.com/settings/security
-   # Crie um Access Token
-   # Use o token como DOCKER_PASSWORD
-   ```
+**SSH Key:**
+```bash
+# Gerar chave SSH
+ssh-keygen -t rsa -b 4096 -C "github-actions"
 
-2. **SSH Key:**
-   ```bash
-   # Gerar chave SSH
-   ssh-keygen -t rsa -b 4096 -C "github-actions"
-   
-   # Adicionar chave pública no servidor
-   ssh-copy-id -i ~/.ssh/id_rsa.pub user@server
-   
-   # Usar chave privada como SSH_PRIVATE_KEY
-   cat ~/.ssh/id_rsa
-   ```
+# Adicionar chave pública no servidor
+ssh-copy-id -i ~/.ssh/id_rsa.pub user@server
+
+# Usar chave privada como SSH_PRIVATE_KEY
+cat ~/.ssh/id_rsa
+```
 
 ## 🐳 Configuração Docker
 
 ### 📦 Imagens Docker
 
-- **Frontend:** `alltomatos/painel-community:latest`
-- **Backend:** `alltomatos/painel-community-api:latest`
+- **Frontend:** `painelcommunity:latest` (build local)
+- **Backend:** `painelcommunity-api:latest` (build local)
 
-### 🔄 Build e Push
+### 🔄 Build Local
 
 ```bash
 # Build local
-docker build -t alltomatos/painel-community:latest .
+docker build -t painelcommunity:latest .
 
-# Push para Docker Hub
-docker push alltomatos/painel-community:latest
+# Build da API (se necessário)
+docker build -t painelcommunity-api:latest ./api
 ```
 
 ## 🚀 Deploy

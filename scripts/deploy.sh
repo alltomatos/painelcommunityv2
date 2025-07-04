@@ -62,10 +62,18 @@ log "📦 Verificando volumes..."
 docker volume create painelcommunity_postgres_data 2>/dev/null || warning "Volume postgres_data já existe"
 docker volume create painelcommunity_redis_data 2>/dev/null || warning "Volume redis_data já existe"
 
-# Fazer pull das imagens mais recentes
-log "📥 Fazendo pull das imagens..."
-docker pull alltomatos/painel-community:latest || warning "Erro ao fazer pull da imagem frontend"
-docker pull alltomatos/painel-community-api:latest || warning "Erro ao fazer pull da imagem backend"
+# Fazer pull do código e build local
+log "📥 Fazendo pull do código e build local..."
+if [ -d ".git" ]; then
+  git pull origin develop || warning "Erro ao fazer pull do código"
+else
+  git clone https://github.com/alltomatos/painelcommunity.git . || warning "Erro ao clonar repositório"
+  git checkout develop
+fi
+
+# Build das imagens localmente
+log "🏗️ Build das imagens localmente..."
+docker build -t painelcommunity:latest . || warning "Erro ao fazer build da imagem frontend"
 
 # Deploy da stack
 log "🚀 Deployando stack $STACK_NAME..."

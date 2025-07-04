@@ -4,7 +4,7 @@ services:
 ## --------------------------- PAINEL COMMUNITY --------------------------- ##
 
   painelcommunity_frontend:
-    image: alltomatos/painel-community:latest
+    image: painelcommunity:latest
     networks:
       - proxy
     environment:
@@ -31,7 +31,7 @@ services:
 ## --------------------------- PAINEL COMMUNITY API --------------------------- ##
 
   painelcommunity_api:
-    image: alltomatos/painel-community-api:latest
+    image: painelcommunity-api:latest
     networks:
       - proxy
     environment:
