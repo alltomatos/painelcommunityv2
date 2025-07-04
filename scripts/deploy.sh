@@ -82,9 +82,9 @@ docker service ls | grep "$STACK_NAME" || error "Nenhum serviço encontrado para
 # Health check
 log "🏥 Executando health check..."
 if [ "$ENVIRONMENT" = "test" ]; then
-    HEALTH_URL="https://test.painel.alltomatos.app.br/health"
+    HEALTH_URL="https://test.painel.alltomatos.app.br:51978/health"
 else
-    HEALTH_URL="https://painel.alltomatos.app.br/health"
+    HEALTH_URL="https://painel.alltomatos.app.br:51978/health"
 fi
 
 # Tentar health check algumas vezes

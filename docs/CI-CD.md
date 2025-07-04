@@ -88,8 +88,8 @@ docker push alltomatos/painel-community:latest
 
 | Ambiente | Frontend | API |
 |----------|----------|-----|
-| **Teste** | `https://test.painel.alltomatos.app.br` | `https://api-test.painel.alltomatos.app.br` |
-| **Produção** | `https://painel.alltomatos.app.br` | `https://api.painel.alltomatos.app.br` |
+| **Teste** | `https://test.painel.alltomatos.app.br:51978` | `https://api-test.painel.alltomatos.app.br:1986` |
+| **Produção** | `https://painel.alltomatos.app.br:51978` | `https://api.painel.alltomatos.app.br:1986` |
 
 ### 🔧 Deploy Manual
 
@@ -111,7 +111,7 @@ docker service ls | grep painelcommunity
 docker service logs painelcommunity-test_painelcommunity_frontend
 
 # Health check
-curl -f https://test.painel.alltomatos.app.br/health
+curl -f https://test.painel.alltomatos.app.br:51978/health
 ```
 
 ## 🧪 Testes

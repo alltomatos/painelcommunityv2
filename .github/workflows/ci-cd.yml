@@ -103,13 +103,13 @@ jobs:
           docker service ls | grep painelcommunity-test
           
           # Health check
-          curl -f https://test.painel.alltomatos.app.br/health || exit 1
+          curl -f https://test.painel.alltomatos.app.br:51978/health || exit 1
         EOF
         
     - name: 📊 Deployment status
       run: |
         echo "✅ Deploy to test environment completed successfully!"
-        echo "🌐 Test URL: https://test.painel.alltomatos.app.br"
+        echo "🌐 Test URL: https://test.painel.alltomatos.app.br:51978"
         echo "🐳 Image: ${{ env.DOCKER_IMAGE }}:${{ github.sha }}"
 
   # ========================================
@@ -155,13 +155,13 @@ jobs:
           docker service ls | grep painelcommunity-prod
           
           # Health check
-          curl -f https://painel.alltomatos.app.br/health || exit 1
+          curl -f https://painel.alltomatos.app.br:51978/health || exit 1
         EOF
         
     - name: 📊 Production deployment status
       run: |
         echo "✅ Deploy to production completed successfully!"
-        echo "🌐 Production URL: https://painel.alltomatos.app.br"
+        echo "🌐 Production URL: https://painel.alltomatos.app.br:51978"
         echo "🐳 Image: ${{ env.DOCKER_IMAGE }}:${{ github.sha }}"
 
   # ========================================
@@ -177,8 +177,8 @@ jobs:
       run: |
         if [ "${{ needs.deploy-test.result }}" == "success" ] || [ "${{ needs.deploy-production.result }}" == "success" ]; then
           echo "✅ Deployment successful!"
-          echo "🔗 Test: https://test.painel.alltomatos.app.br"
-          echo "🔗 Prod: https://painel.alltomatos.app.br"
+          echo "🔗 Test: https://test.painel.alltomatos.app.br:51978"
+          echo "🔗 Prod: https://painel.alltomatos.app.br:51978"
         else
           echo "❌ Deployment failed!"
           exit 1

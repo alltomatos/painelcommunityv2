@@ -25,7 +25,7 @@ services:
         - traefik.http.routers.painelcommunity_frontend_test.priority=1
         - traefik.http.routers.painelcommunity_frontend_test.tls.certresolver=letsencryptresolver
         - traefik.http.routers.painelcommunity_frontend_test.service=painelcommunity_frontend_test
-        - traefik.http.services.painelcommunity_frontend_test.loadbalancer.server.port=3000
+        - traefik.http.services.painelcommunity_frontend_test.loadbalancer.server.port=51978
         - traefik.http.services.painelcommunity_frontend_test.loadbalancer.passHostHeader=true
 
 ## --------------------------- PAINEL COMMUNITY API --------------------------- ##
@@ -36,7 +36,7 @@ services:
       - proxy
     environment:
       - NODE_ENV=production
-      - PORT=3001
+      - PORT=1986
       - DATABASE_URL=postgresql://painel_user:painel_password@postgres:5432/painelcommunity
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
@@ -54,7 +54,7 @@ services:
         - traefik.http.routers.painelcommunity_api_test.priority=1
         - traefik.http.routers.painelcommunity_api_test.tls.certresolver=letsencryptresolver
         - traefik.http.routers.painelcommunity_api_test.service=painelcommunity_api_test
-        - traefik.http.services.painelcommunity_api_test.loadbalancer.server.port=3001
+        - traefik.http.services.painelcommunity_api_test.loadbalancer.server.port=1986
         - traefik.http.services.painelcommunity_api_test.loadbalancer.passHostHeader=true
 
 ## --------------------------- POSTGRES --------------------------- ##

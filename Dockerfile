@@ -36,11 +36,11 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expor porta
-EXPOSE 3000
+EXPOSE 51978
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/ || exit 1
+  CMD curl -f http://localhost:51978/ || exit 1
 
 # Comando de inicialização
 CMD ["nginx", "-g", "daemon off;"]
@@ -63,7 +63,7 @@ RUN npm install
 COPY . .
 
 # Expor porta de desenvolvimento
-EXPOSE 3000
+EXPOSE 51978
 
 # Comando de desenvolvimento
 CMD ["npm", "run", "dev"] 
