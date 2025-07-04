@@ -9,5 +9,5 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 1953
+EXPOSE 1986
 CMD ["node", "dist/main.js"] 

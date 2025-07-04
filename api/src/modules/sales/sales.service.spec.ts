@@ -25,4 +25,8 @@ describe('SalesService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('deve ...', async () => {
+    // ... existing code ...
+  });
 });

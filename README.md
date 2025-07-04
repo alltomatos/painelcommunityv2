@@ -76,3 +76,17 @@ O **Painel Community** é o backend proprietário do marketplace de plugins do e
 
 ## 🏷️ Licença
 Este projeto faz parte do ecossistema GarapaCRM. O Painel Community é proprietário, enquanto o GarapaCRM Community é open source.
+
+## Instrução Importante para Backend
+
+> Sempre execute o comando abaixo **dentro da pasta**:
+>
+> **D:\projetos\crm\painelcommunity\api**
+>
+> ```sh
+> npm run start:dev
+> ```
+>
+> Nunca execute este comando na raiz do projeto ou em outro diretório.
+
+## Outras instruções e informações do projeto
