@@ -300,3 +300,8 @@ Para dúvidas ou problemas:
 2. **Verificar deploy:** Script de deploy com logs detalhados
 3. **Documentação:** Este arquivo e README.md
 4. **Issues:** Criar issue no GitHub com detalhes do problema 
+
+# Ver a chave pública
+cat C:\Users\seu-usuario\.ssh\id_rsa_painelcommunity.pub
+
+# Copie todo o conteúdo (começa com ssh-rsa...) 
