@@ -105,7 +105,7 @@ Criar um **painel administrativo completo** para o ecossistema do GarapaCRM Comm
 
 ---
 
-### �� Sprint 06 – UI Refinada + Design Tokens
+### 🟦 Sprint 06 – UI Refinada + Design Tokens
 
 **Resumo:** Aplicar rigorosamente todas as regras de densidade, contraste e responsividade.
 
@@ -121,19 +121,22 @@ Criar um **painel administrativo completo** para o ecossistema do GarapaCRM Comm
 
 ---
 
-### 🟧 Sprint 07 – Painel de Vendas + Relatórios
+### 🟦 Sprint 07 – Estabilização Backend e Testes Automatizados
 
-**Resumo:** Criar dashboard de vendas com filtros e estatísticas por plugin.
+**Resumo:** Garantir estabilidade do backend, corrigir problemas de build, dependências e ambiente, validar funcionamento com testes automatizados e padronizar scripts de inicialização e debug.
 
 - **Objetivos:**
-  - Tabela com histórico de compras
-  - Gráfico de vendas por período
-  - Filtros por plugin, status, data
-- **Arquivos afetados:** `src/pages/sales/`, `components/sales-table.tsx`
+  - Corrigir scripts e configurações do backend
+  - Validar ambiente de desenvolvimento e debug
+  - Executar e acompanhar testes automatizados (Playwright/Jest)
+  - Garantir estrutura modular e ambiente estável
+- **Arquivos afetados:** `api/`, `api/package.json`, `api/tsconfig.json`, `api/src/`
 - **Critérios de aceite:**
-  - Visualização com densidade otimizada
-  - Permitir exportar CSV
-  - Mostrar status de pagamento + token
+  - Backend rodando em modo desenvolvimento e debug
+  - 0 erros TypeScript e ESLint
+  - Testes automatizados executados e validados
+  - Documentação atualizada
+- **Responsividade:** N/A (backend)
 
 ---
 
