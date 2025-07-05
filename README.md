@@ -90,3 +90,49 @@ Este projeto faz parte do ecossistema GarapaCRM. O Painel Community é propriet�
 > Nunca execute este comando na raiz do projeto ou em outro diretório.
 
 ## Outras instruções e informações do projeto
+
+## Health Check Sidebar
+
+O sidebar exibe o status dos principais serviços (API, Redis, RabbitMQ) em tempo real, refletindo a realidade do backend.
+
+### Como funciona
+- O frontend utiliza o hook `useApiStatus` para consultar periodicamente os endpoints:
+  - `${VITE_API_URL}/health`
+  - `${VITE_API_URL}/health/redis`
+  - `${VITE_API_URL}/health/rabbitmq`
+- O endereço base é definido pela variável de ambiente `VITE_API_URL` no arquivo `.env` do frontend.
+- O status "Online"/"Offline" é exibido conforme a resposta real do backend.
+
+### Exemplo de configuração do .env
+```env
+VITE_API_URL=http://localhost:1986/api
+```
+
+### Exemplo de endpoints
+- `GET /api/health` → status da API e serviços
+- `GET /api/health/redis` → status do Redis
+- `GET /api/health/rabbitmq` → status do RabbitMQ
+
+### Observações
+- Não deve haver duplicidade de `/api` nas URLs.
+- O backend deve estar rodando e expor corretamente os endpoints acima.
+- O campo `download_url` dos plugins agora sempre retorna uma URL completa, baseada no endereço do backend.
+
+---
+
+## Atualizações recentes
+- Correção do health check para usar o endereço do `.env`.
+- Padronização do campo `download_url` dos plugins.
+- Sidebar reflete status real dos serviços.
+
+---
+
+## Como contribuir
+1. Faça fork do repositório.
+2. Crie uma branch para sua feature/correção.
+3. Envie um Pull Request com a descrição detalhada.
+
+---
+
+## Dúvidas
+Abra uma issue ou entre em contato com o time GarapaCRM.
