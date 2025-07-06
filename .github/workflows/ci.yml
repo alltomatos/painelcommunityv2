@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - name: Clonar repositório painelcommunityv2
+        run: |
+          rm -rf * .[^.]* || true
+          git clone https://github.com/alltomatos/painelcommunityv2.git .
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Instalar dependências (root)
+        run: npm install
+      - name: Instalar dependências (backend)
+        run: |
+          cd api
+          npm install
+      - name: Rodar testes do backend
+        run: |
+          cd api
+          npm run test -- --passWithNoTests
+      - name: Rodar testes do frontend
+        run: |
+          npm run test -- --passWithNoTests || true
+      - name: Rodar lint do backend
+        run: |
+          cd api
+          npm run lint || true
+      - name: Rodar lint do frontend
+        run: |
+          npm run lint || true
+      - name: Instalar Codecov
+        run: npm install -g codecov
+      - name: Gerar cobertura backend
+        run: |
+          cd api
+          npm run test:cov
+      - name: Upload cobertura backend para Codecov
+        run: |
+          cd api
+          codecov -f coverage/lcov.info -F backend || true
+      - name: Gerar cobertura frontend
+        run: |
+          npm run test -- --coverage
+      - name: Upload cobertura frontend para Codecov
+        run: |
+          codecov -f coverage/lcov.info -F frontend || true 
